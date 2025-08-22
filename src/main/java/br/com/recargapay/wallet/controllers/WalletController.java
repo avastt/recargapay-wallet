@@ -2,6 +2,7 @@ package br.com.recargapay.wallet.controllers;
 
 
 import br.com.recargapay.wallet.controllers.inputs.requests.CreateWalletRequest;
+import br.com.recargapay.wallet.controllers.inputs.requests.TransactionRequest;
 import br.com.recargapay.wallet.controllers.inputs.responses.WalletResponse;
 import br.com.recargapay.wallet.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,11 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static br.com.recargapay.wallet.controllers.inputs.responses.WalletResponse.createResponse;
@@ -27,6 +30,10 @@ public class WalletController {
 
 	private CreateUserWallet createWallet;
 	private GetUserBalance getUserBalance;
+	private GetHistoricalBalanceByDate getHistoricalBalanceByDate;
+	private DepositAmount depositAmount;
+
+	private WithdrawAmount withdrawAmount;
 
 	@PostMapping("/create")
 	@Operation(summary = "Create New Wallet",
@@ -43,11 +50,11 @@ public class WalletController {
 
 	@GetMapping("/{id}/balance")
 	@Operation(summary = "Get User Wallet Balance",
-	responses = {
-			@ApiResponse(responseCode = "200", description = "OK!"),
-			@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
-			@ApiResponse(responseCode = "404", description = "User wallet not found.")
-	})
+			responses = {
+					@ApiResponse(responseCode = "200", description = "OK!"),
+					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
+					@ApiResponse(responseCode = "404", description = "User wallet not found.")
+			})
 	public ResponseEntity<BigDecimal> userWalletBalance(@PathVariable final UUID id) {
 
 		log.debug("GET user wallet balance: {} ", id.toString());
@@ -56,4 +63,46 @@ public class WalletController {
 		return ResponseEntity.status(HttpStatus.OK).body(balance);
 	}
 
+	@PostMapping("/{id}/deposit")
+	@Operation(summary = "Adding funds to a wallet",
+			responses = {
+					@ApiResponse(responseCode = "201", description = "Funds added successfully!"),
+					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
+					@ApiResponse(responseCode = "404", description = "Wallet not found. Check request and try again.")
+			})
+	public ResponseEntity<WalletResponse> deposit(final @PathVariable UUID id,
+												  final @RequestBody TransactionRequest amount) {
+
+		var savedWallet = depositAmount.execute(id, amount.getAmount());
+		return ResponseEntity.status(HttpStatus.CREATED).body(createResponse(savedWallet));
+	}
+
+	@PostMapping("/{id}/withdraw")
+	@Operation(summary = "Withdrawn funds from a wallet",
+			responses = {
+					@ApiResponse(responseCode = "201", description = "Funds withdrawn successfully!"),
+					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
+					@ApiResponse(responseCode = "404", description = "Wallet not found. Check request and try again.")
+			})
+	public ResponseEntity<WalletResponse> withdraw(final @PathVariable UUID id,
+												   final @RequestBody TransactionRequest amount) {
+
+		var savedWallet = withdrawAmount.execute(id, amount.getAmount());
+		return ResponseEntity.status(HttpStatus.CREATED).body(createResponse(savedWallet));
+	}
+
+	@GetMapping("/{id}/historical/balance")
+	@Operation(summary = "Get User Wallet Balance by custom period",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "OK!"),
+					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
+					@ApiResponse(responseCode = "404", description = "User wallet not found.")
+			})
+	public ResponseEntity<BigDecimal> userWalletBalanceByPeriod(@PathVariable final UUID id,
+																@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+																final LocalDate date) {
+		var balance = getHistoricalBalanceByDate.execute(id, date);
+		log.debug("GET historical balance: {} ", balance);
+		return ResponseEntity.status(HttpStatus.OK).body(balance);
+	}
 }
