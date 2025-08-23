@@ -24,7 +24,7 @@ public class TransactionModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", nullable = false)
     private WalletModel wallet;
     private BigDecimal amount;

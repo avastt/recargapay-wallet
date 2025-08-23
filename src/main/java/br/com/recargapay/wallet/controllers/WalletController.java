@@ -36,6 +36,7 @@ public class WalletController {
 	private final GetHistoricalBalanceByDate getHistoricalBalanceByDate;
 	private final DepositAmount depositAmount;
 	private final WithdrawAmount withdrawAmount;
+	private final TransferFunds transferFunds;
 
 	@PostMapping("/create")
 	@Operation(summary = "Create New Wallet",
@@ -118,7 +119,8 @@ public class WalletController {
 					@ApiResponse(responseCode = "404", description = "Wallet not found. Check request and try again.")
 			})
 	public ResponseEntity<WalletResponse> transfer(final @RequestBody TransferRequest transferRequest) {
-
-		return null;
+		var wallet = transferFunds.execute(transferRequest.getFromWalletId(),
+				transferRequest.getToWalletId(), transferRequest.getAmount());
+		return ResponseEntity.status(HttpStatus.CREATED).body(createResponse(wallet));
 	}
 }

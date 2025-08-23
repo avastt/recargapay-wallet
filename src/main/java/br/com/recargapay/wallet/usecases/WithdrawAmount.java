@@ -50,14 +50,18 @@ public class WithdrawAmount {
     }
 
     private void createTransaction(final BigDecimal amount, final Wallet wallet) {
-        Transaction transaction = Transaction.builder()
+        Transaction transaction = buildTransaction(amount, wallet);
+
+        transactionRepository.save(new TransactionModel(transaction));
+    }
+
+    private static Transaction buildTransaction(final BigDecimal amount, final Wallet wallet) {
+        return Transaction.builder()
                 .wallet(wallet)
                 .amount(amount)
                 .type(TransactionType.WITHDRAW)
                 .historicalBalance(wallet.getBalance())
                 .createdAt(LocalDateTime.now())
                 .build();
-
-        transactionRepository.save(new TransactionModel(transaction));
     }
 }
