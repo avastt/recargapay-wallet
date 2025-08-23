@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateUserWallet {
 
-	private WalletRepository walletRepository;
+	private final WalletRepository walletRepository;
 
 	@Transactional
 	public Wallet execute(final Wallet wallet) {

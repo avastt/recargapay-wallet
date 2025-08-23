@@ -23,13 +23,13 @@ import static br.com.recargapay.wallet.exception.ErrorKey.INSUFFICIENT_FUNDS;
 @RequiredArgsConstructor
 public class WithdrawAmount {
 
-    private GetUserWallet getUserWallet;
+    private final GetUserWallet getUserWallet;
 
-    private WalletRepository walletRepository;
+    private final WalletRepository walletRepository;
 
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
-    private MessageUtils messageUtils;
+    private final MessageUtils messageUtils;
 
     @Transactional
     public Wallet execute(final UUID walletId, final BigDecimal amount){

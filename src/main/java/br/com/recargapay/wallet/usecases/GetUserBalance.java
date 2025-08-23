@@ -11,7 +11,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GetUserBalance {
 
-	private GetUserWallet getUserWallet;
+	private final GetUserWallet getUserWallet;
 
 	public BigDecimal execute(final UUID id) {
 		var wallet = getUserWallet.execute(id);

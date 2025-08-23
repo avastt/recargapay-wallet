@@ -16,9 +16,9 @@ import static br.com.recargapay.wallet.exception.ErrorKey.USER_WALLET_NOT_FOUND;
 @RequiredArgsConstructor
 public class GetUserWallet {
 
-	private WalletRepository walletRepository;
+	private final WalletRepository walletRepository;
 
-	private MessageUtils messageUtils;
+	private final MessageUtils messageUtils;
 
 	public Wallet execute(final UUID id) {
 		return walletRepository.findById(id)

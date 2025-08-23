@@ -20,9 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DepositAmount {
 
-	private WalletRepository walletRepository;
-	private TransactionRepository transactionRepository;
-	private GetUserWallet getUserWallet;
+	private final WalletRepository walletRepository;
+	private final TransactionRepository transactionRepository;
+	private final GetUserWallet getUserWallet;
 
 	@Transactional
 	public Wallet execute(final UUID walletId, final BigDecimal amount) {

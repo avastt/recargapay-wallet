@@ -20,9 +20,9 @@ import static br.com.recargapay.wallet.exception.ErrorKey.TRANSACTION_NOT_FOUND;
 public class GetHistoricalBalanceByDate {
 
 	public static final int DAYS_TO_ADD = 1;
-	private TransactionRepository transactionRepository;
+	private final TransactionRepository transactionRepository;
 
-	private MessageUtils messageUtils;
+	private final MessageUtils messageUtils;
 
 	public BigDecimal
 	execute(final UUID id, final LocalDate date) {
