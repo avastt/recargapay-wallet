@@ -35,7 +35,7 @@ public class DepositAmount {
 
 	private void updateWalletBalance(final BigDecimal amount, final Wallet wallet) {
 		wallet.setBalance(wallet.getBalance().add(amount));
-		walletRepository.save(new WalletModel(wallet)).toDomain();
+		walletRepository.save(new WalletModel(wallet));
 	}
 
 	private void createTransaction(final BigDecimal amount, final Wallet wallet) {

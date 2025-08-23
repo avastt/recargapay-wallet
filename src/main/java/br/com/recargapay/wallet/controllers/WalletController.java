@@ -3,12 +3,14 @@ package br.com.recargapay.wallet.controllers;
 
 import br.com.recargapay.wallet.controllers.inputs.requests.CreateWalletRequest;
 import br.com.recargapay.wallet.controllers.inputs.requests.TransactionRequest;
+import br.com.recargapay.wallet.controllers.inputs.requests.TransferRequest;
 import br.com.recargapay.wallet.controllers.inputs.responses.WalletResponse;
 import br.com.recargapay.wallet.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -22,18 +24,18 @@ import java.util.UUID;
 import static br.com.recargapay.wallet.controllers.inputs.responses.WalletResponse.createResponse;
 
 @Log4j2
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/wallet")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Wallet")
 public class WalletController {
 
-	private CreateUserWallet createWallet;
-	private GetUserBalance getUserBalance;
-	private GetHistoricalBalanceByDate getHistoricalBalanceByDate;
-	private DepositAmount depositAmount;
-
-	private WithdrawAmount withdrawAmount;
+	private final CreateUserWallet createWallet;
+	private final GetUserBalance getUserBalance;
+	private final GetHistoricalBalanceByDate getHistoricalBalanceByDate;
+	private final DepositAmount depositAmount;
+	private final WithdrawAmount withdrawAmount;
 
 	@PostMapping("/create")
 	@Operation(summary = "Create New Wallet",
@@ -75,6 +77,8 @@ public class WalletController {
 
 		var savedWallet = depositAmount.execute(id, amount.getAmount());
 		return ResponseEntity.status(HttpStatus.CREATED).body(createResponse(savedWallet));
+
+
 	}
 
 	@PostMapping("/{id}/withdraw")
@@ -104,5 +108,17 @@ public class WalletController {
 		var balance = getHistoricalBalanceByDate.execute(id, date);
 		log.debug("GET historical balance: {} ", balance);
 		return ResponseEntity.status(HttpStatus.OK).body(balance);
+	}
+
+	@PostMapping("/transfer")
+	@Operation(summary = "Transfer funds between wallets",
+			responses = {
+					@ApiResponse(responseCode = "201", description = "Transfer completed successfully!"),
+					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
+					@ApiResponse(responseCode = "404", description = "Wallet not found. Check request and try again.")
+			})
+	public ResponseEntity<WalletResponse> transfer(final @RequestBody TransferRequest transferRequest) {
+
+		return null;
 	}
 }

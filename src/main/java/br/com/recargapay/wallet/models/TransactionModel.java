@@ -34,6 +34,7 @@ public class TransactionModel {
     private LocalDateTime createdAt;
 
     public TransactionModel(final Transaction transaction) {
+        this.id = transaction.getId();
         this.wallet = ofNullable(transaction.getWallet())
                 .map(WalletModel::new).orElse(null);
         this.amount = transaction.getAmount();

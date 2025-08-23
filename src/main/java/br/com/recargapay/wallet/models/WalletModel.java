@@ -28,6 +28,7 @@ public class WalletModel {
     private LocalDateTime createdAt;
 
     public WalletModel(final Wallet wallet) {
+        this.id = wallet.getId();
         this.balance = wallet.getBalance() == null ? BigDecimal.ZERO : wallet.getBalance();
         this.walletName = wallet.getWalletName();
         this.userName = wallet.getUserName();
