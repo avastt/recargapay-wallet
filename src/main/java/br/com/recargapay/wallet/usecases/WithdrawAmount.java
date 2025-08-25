@@ -46,7 +46,7 @@ public class WithdrawAmount {
         }
 
         wallet.setBalance(wallet.getBalance().subtract(amount));
-        walletRepository.save(new WalletModel(wallet)).toDomain();
+        walletRepository.save(new WalletModel(wallet));
     }
 
     private void createTransaction(final BigDecimal amount, final Wallet wallet) {

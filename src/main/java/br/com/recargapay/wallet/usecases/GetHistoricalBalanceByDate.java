@@ -24,8 +24,7 @@ public class GetHistoricalBalanceByDate {
 
 	private final MessageUtils messageUtils;
 
-	public BigDecimal
-	execute(final UUID id, final LocalDate date) {
+	public BigDecimal execute(final UUID id, final LocalDate date) {
 		LocalDateTime startOfDay = date.atStartOfDay();
 		LocalDateTime startOfNextDay = date.plusDays(DAYS_TO_ADD).atStartOfDay();
 

@@ -55,8 +55,8 @@ public class TransferFunds {
 		fromWallet.setBalance(fromWallet.getBalance().subtract(amount));
 		toWallet.setBalance(toWallet.getBalance().add(amount));
 
-		walletRepository.save(new WalletModel(fromWallet)).toDomain();
-		walletRepository.save(new WalletModel(toWallet)).toDomain();
+		walletRepository.save(new WalletModel(fromWallet));
+		walletRepository.save(new WalletModel(toWallet));
 	}
 
 	private static Transaction buildTransaction(final BigDecimal amount, final Wallet wallet,

@@ -54,7 +54,7 @@ public class WalletController {
 	@GetMapping("/{id}/balance")
 	@Operation(summary = "Get User Wallet Balance",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "OK!"),
+					@ApiResponse(responseCode = "200", description = "User Balance: "),
 					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
 					@ApiResponse(responseCode = "404", description = "User wallet not found.")
 			})
@@ -99,7 +99,7 @@ public class WalletController {
 	@GetMapping("/{id}/historical/balance")
 	@Operation(summary = "Get User Wallet Balance by custom period",
 			responses = {
-					@ApiResponse(responseCode = "200", description = "OK!"),
+					@ApiResponse(responseCode = "200", description = "User balance by period:"),
 					@ApiResponse(responseCode = "400", description = "Bad request. Check request and try again."),
 					@ApiResponse(responseCode = "404", description = "User wallet not found.")
 			})
