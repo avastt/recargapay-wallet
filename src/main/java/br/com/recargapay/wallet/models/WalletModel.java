@@ -36,6 +36,7 @@ public class WalletModel {
         this.userName = wallet.getUserName();
         this.currency = wallet.getCurrency();
         this.createdAt = LocalDateTime.now();
+        this.version = wallet.getVersion();
     }
 
     public Wallet toDomain(){
@@ -46,6 +47,7 @@ public class WalletModel {
                 .balance(balance)
                 .currency(currency)
                 .createdAt(createdAt)
+                .version(version)
                 .build();
     }
 }

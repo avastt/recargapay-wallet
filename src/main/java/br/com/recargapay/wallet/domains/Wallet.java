@@ -21,4 +21,5 @@ public class Wallet {
     private Currency currency;
     private BigDecimal balance;
     private LocalDateTime createdAt;
+    private Long version;
 }
