@@ -26,6 +26,8 @@ public class WalletModel {
     private Currency currency;
     private BigDecimal balance;
     private LocalDateTime createdAt;
+    @Version
+    private Long version;
 
     public WalletModel(final Wallet wallet) {
         this.id = wallet.getId();

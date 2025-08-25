@@ -10,6 +10,9 @@ import br.com.recargapay.wallet.repository.TransactionRepository;
 import br.com.recargapay.wallet.repository.WalletRepository;
 import br.com.recargapay.wallet.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,11 @@ public class TransferFunds {
 	private final MessageUtils messageUtils;
 
 	@Transactional
+	@Retryable(
+			retryFor = OptimisticLockingFailureException.class,
+			maxAttempts = 3,
+			backoff = @Backoff(delay = 200)
+	)
 	public Wallet execute(final UUID fromWalletId, final UUID toWalletId, final BigDecimal amount ) {
 
 		var fromWallet = getUserWallet.execute(fromWalletId);

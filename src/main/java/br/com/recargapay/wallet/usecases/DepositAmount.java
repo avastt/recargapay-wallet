@@ -8,6 +8,9 @@ import br.com.recargapay.wallet.models.WalletModel;
 import br.com.recargapay.wallet.repository.TransactionRepository;
 import br.com.recargapay.wallet.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,11 @@ public class DepositAmount {
 	private final GetUserWallet getUserWallet;
 
 	@Transactional
+	@Retryable(
+			retryFor = OptimisticLockingFailureException.class,
+			maxAttempts = 3,
+			backoff = @Backoff(delay = 200)
+	)
 	public Wallet execute(final UUID walletId, final BigDecimal amount) {
 		var userWallet = getUserWallet.execute(walletId);
 		updateWalletBalance(amount, userWallet);
