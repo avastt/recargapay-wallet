@@ -77,7 +77,6 @@ all operations to facilitate auditing of wallet balances.
    - Swagger at http://localhost:8080/swagger-ui/index.html#/
 
 ### Architecture Decision and Design
-
 - **Clean Architecture**
   - promotes the separation of concerns within an application, making it more maintainable, testable, and adaptable to changes;
 ![img.png](img.png)
@@ -102,3 +101,9 @@ all operations to facilitate auditing of wallet balances.
 - **JUnit5 + Mockito**: For unit tests;
 - **Race conditions lock**: To handle concurrency and ensure data integrity during transactions;
 - **Docker**: Containerization for easy deployment;
+
+### To Be Improved
+- Security Layer with: JWT authentication;
+- CI/CD pratices;
+- Redis caching layer;
+- More tests like Container tests;
